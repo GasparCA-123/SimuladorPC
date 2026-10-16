@@ -1,0 +1,96 @@
+/* =====================================================================
+   biblioteca/ram-ddr4.css · RAM DDR4 DIMM (288 pines, 8GB, PC4-25600)
+   Todo está dentro de .d4 → no choca con ram-ddr1.css ni con tu simulador.
+   Tamaño base 560 × 131 px (133,35 × 31,25 mm). Escala con --d4-scale.
+   Las muescas se recortan con clip-path: no dependen del color de fondo.
+   ===================================================================== */
+
+.d4{
+  --d4-scale:1;
+  --d4-pcb-a:#0c3f3b; --d4-pcb-b:#072a27; --d4-edge:rgba(120,225,215,.4);
+  --d4-gold:#d8b25c;  --d4-gold-dark:#8a6a2c;
+  --d4-mono:ui-monospace,"SFMono-Regular","JetBrains Mono",Menlo,Consolas,monospace;
+  display:flex; align-items:center; justify-content:center;
+  width:100%; height:100%; min-height:100%; padding:12px; box-sizing:border-box;
+}
+/* tamaños según dónde se muestre (ajústalos a tu gusto) */
+.biblioteca-card-model .d4{ --d4-scale:.5; }
+/* centra el módulo en la tarjeta (horizontal y vertical) */
+.biblioteca-card-model:has(.d4){ display:grid; place-items:center; overflow:hidden; }
+.biblioteca-card-model .d4{ padding:0; }
+.biblioteca-visual-grande .d4{ --d4-scale:1; }
+
+.d4 .d4-box{ width:calc(560px * var(--d4-scale)); height:calc(131px * var(--d4-scale)); flex:none; }
+.d4 .d4-box .flip-viewport{          /* mayor especificidad: anula .biblioteca-card .flip-viewport del style.css */
+  position:relative; left:0; top:0; margin:0; width:560px; height:131px; perspective:1400px;
+  transform:scale(var(--d4-scale)); transform-origin:0 0;
+}
+.d4 .flip-inner{ position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:none; }
+.d4 .ram-face{ position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; }
+.d4 .ram-back{ transform:rotateY(180deg); }
+
+/* PCB + muescas recortadas (V de la muesca DDR4 y semicírculos de los extremos) */
+.d4 .ram{
+  border-radius:5px 5px 2px 2px;
+  background:
+    radial-gradient(circle at 8% 10%, rgba(255,255,255,.08), transparent 30%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,.02) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(-45deg, rgba(0,0,0,.04) 0 1px, transparent 1px 3px),
+    linear-gradient(180deg, var(--d4-pcb-a), var(--d4-pcb-b) 88%);
+  box-shadow:inset 0 0 0 1px var(--d4-edge), inset 0 2px 0 rgba(255,255,255,.10), inset 0 -3px 6px rgba(0,0,0,.4);
+  clip-path:polygon(
+    0 0, 560px 0,
+    560px 96px, 556.5px 97.5px, 555px 101px, 556.5px 104.5px, 560px 106px,
+    560px 131px,
+    270px 131px, 270px 122.6px, 261px 119px, 252px 122.6px, 252px 131px,
+    0 131px,
+    0 106px, 3.5px 104.5px, 5px 101px, 3.5px 97.5px, 0 96px
+  );
+}
+.d4 .surface{ position:absolute; inset:0; pointer-events:none; }
+
+/* chips DRAM */
+.d4 .dram{
+  position:absolute; top:12px; width:40px; height:56px; border-radius:2px;
+  background:radial-gradient(circle at 14% 12%, rgba(255,255,255,.14), transparent 32%), linear-gradient(160deg,#20262c,#05070a 85%);
+  box-shadow:inset 0 0 0 1px #2c333a, 0 3px 6px rgba(0,0,0,.5);
+}
+.d4 .dram::before{ content:""; position:absolute; top:5px; left:5px; right:auto; width:4px; height:4px; border-radius:50%; background:rgba(150,170,178,.35); }
+.d4 .dram::after{
+  content:attr(data-txt); position:absolute; top:16px; left:0; right:0; text-align:center;
+  font-family:var(--d4-mono); font-size:5.5px; letter-spacing:.03em; color:#5d6b73; line-height:1.55; white-space:pre;
+}
+
+/* SPD */
+.d4 .spd{ position:absolute; width:26px; height:15px; border-radius:1.5px;
+  background:linear-gradient(160deg,#22262c,#05070a 85%); box-shadow:inset 0 0 0 1px #2c333a, 0 2px 4px rgba(0,0,0,.45); }
+.d4 .spd::after{ content:"SPD"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:var(--d4-mono); font-size:5.5px; color:#5c6a73; }
+
+/* resistencias / condensadores */
+.d4 .smd{ position:absolute; width:8px; height:4px; border-radius:1px; background:linear-gradient(180deg,#3a3f44,#14171a); box-shadow:0 1px 2px rgba(0,0,0,.5); }
+.d4 .smd.cap{ background:linear-gradient(180deg,#a8885a,#6b5233); }
+
+/* etiqueta */
+.d4 .label-sticker{ position:absolute; width:82px; height:44px; border-radius:2px;
+  background:linear-gradient(180deg,#eef2ef,#d7dfda); box-shadow:0 2px 4px rgba(0,0,0,.35), inset 0 0 0 1px #b9c2bb; }
+.d4 .label-sticker .l1{ position:absolute; top:4px;  left:6px; right:6px; font-family:var(--d4-mono); font-size:8.5px; font-weight:700; color:#1c2622; }
+.d4 .label-sticker .l2{ position:absolute; top:16px; left:6px; right:6px; font-family:var(--d4-mono); font-size:5.6px; color:#4a5a53; }
+.d4 .label-sticker .l3{ position:absolute; top:24px; left:6px; right:6px; font-family:var(--d4-mono); font-size:5.4px; color:#4a5a53; }
+.d4 .label-sticker .barcode{ position:absolute; bottom:4px; left:6px; width:56px; height:5px;
+  background:repeating-linear-gradient(90deg,#1c2622 0 1px,transparent 1px 2.2px,#1c2622 2.2px 3px,transparent 3px 3.6px); }
+
+/* contactos dorados: 144 por cara, dos grupos separados por la muesca */
+.d4 .fingers{ position:absolute; bottom:0; height:20px;
+  background:repeating-linear-gradient(90deg,var(--d4-gold) 0 1.7px,var(--d4-gold-dark) 1.7px 2.9px);
+  box-shadow:inset 0 2px 3px rgba(0,0,0,.35); }
+.d4 .fingers::after{ content:""; position:absolute; left:0; right:0; top:0; height:2px; background:linear-gradient(180deg,rgba(255,255,255,.25),transparent); }
+.d4 .fingers.l{ left:6px; width:246px; }
+.d4 .fingers.r{ left:270px; right:6px; }
+
+/* cara trasera */
+.d4 .ram-trace{ position:absolute; height:1.4px; background:rgba(120,225,215,.2); }
+.d4 .ram-trace.v{ width:1.4px; height:auto; }
+.d4 .ram-via{ position:absolute; width:5px; height:5px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#cfead2,#6fae8f 55%,#234438 100%); box-shadow:0 0 0 1.3px rgba(0,0,0,.35); }
+.d4 .ram-print{ position:absolute; font-family:var(--d4-mono); font-size:7px; letter-spacing:.04em; color:rgba(210,235,225,.45); }

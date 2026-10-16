@@ -1,0 +1,124 @@
+/* =====================================================================
+   biblioteca/teclado.css · Teclado mecánico 60 % (61 teclas, ANSI)
+   Tamaño base 560 × 200 px. Escala con --kb-scale.
+   Todo vive dentro de .kb → no choca con otros componentes.
+   Cara superior = teclas · cara inferior = base (patas, tornillos, etiqueta).
+   ===================================================================== */
+
+.kb{
+  --kb-scale:1;
+  --kb-case-a:#2b3038; --kb-case-b:#15181d;
+  --kb-plate:#0e1115;
+  --kb-cap-a:#e9ecef;  --kb-cap-b:#c4cad1;  --kb-cap-side:#8d949c;  --kb-ink:#2a2f36;
+  --kb-mod-a:#7d8792;  --kb-mod-b:#5c6670;  --kb-mod-side:#3f474f;  --kb-mod-ink:#f1f4f6;
+  --kb-acc-a:#ff8a3d;  --kb-acc-b:#e0661a;  --kb-acc-side:#9c430c;  --kb-acc-ink:#fff6ef;
+  --kb-font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --kb-mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  display:flex; align-items:center; justify-content:center;
+  width:100%; height:100%; min-height:100%; padding:12px; box-sizing:border-box;
+}
+.biblioteca-card-model .kb{ --kb-scale:.6; padding:0; }
+.biblioteca-visual-grande .kb{ --kb-scale:1; }
+.biblioteca-card-model:has(.kb){ display:grid; place-items:center; overflow:hidden; }
+
+.kb .kb-box{ width:calc(560px * var(--kb-scale)); height:calc(200px * var(--kb-scale)); flex:none; }
+.kb .kb-box .flip-viewport{               /* mayor especificidad que reglas genéricas de .flip-viewport */
+  position:relative; left:0; top:0; margin:0; width:560px; height:200px; perspective:1600px;
+  transform:scale(var(--kb-scale)); transform-origin:0 0;
+}
+.kb .flip-inner{ position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:none; }
+.kb .kb-face{
+  position:absolute; inset:0; border-radius:14px;
+  backface-visibility:hidden; -webkit-backface-visibility:hidden;
+}
+
+/* ---------- Cara superior: carcasa + placa + teclas ---------- */
+.kb .kb-top{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.10), transparent 12%),
+    linear-gradient(180deg, var(--kb-case-a), var(--kb-case-b));
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.08),
+    inset 0 -4px 8px rgba(0,0,0,.45),
+    0 3px 0 #0a0c0f;
+}
+.kb .kb-plate{
+  position:absolute; left:6px; right:6px; top:6px; bottom:6px; border-radius:9px;
+  background:var(--kb-plate); box-shadow:inset 0 2px 6px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.05);
+}
+.kb .kb-led{
+  position:absolute; width:5px; height:5px; border-radius:50%;
+  background:#3b4a42; box-shadow:inset 0 0 0 1px rgba(0,0,0,.5);
+}
+.kb .kb-keys{ position:absolute; inset:0; }
+
+/* ---------- Teclas (keycaps) ---------- */
+.kb .key{
+  position:absolute; height:34px; box-sizing:border-box; border-radius:5px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--kb-font); font-size:10.5px; font-weight:600; letter-spacing:.01em; color:var(--kb-ink);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,0) 40%),
+    linear-gradient(180deg, var(--kb-cap-a), var(--kb-cap-b));
+  /* "pared" inferior de la tecla + sombra sobre la placa */
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.35),
+    inset 0 -3px 0 var(--kb-cap-side),
+    0 2px 0 rgba(0,0,0,.55), 0 4px 6px rgba(0,0,0,.45);
+  transition:transform .08s ease, box-shadow .08s ease;
+  user-select:none;
+}
+.kb .key::before{                 /* hundimiento (dish) de la tapa */
+  content:""; position:absolute; inset:4px 4px 6px; border-radius:3px; pointer-events:none;
+  background:linear-gradient(180deg, rgba(0,0,0,.05), rgba(255,255,255,.35));
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.18);
+}
+.kb .key{ z-index:1; }
+.kb .key.mod{
+  font-size:8.5px; color:var(--kb-mod-ink);
+  background:linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,0) 40%), linear-gradient(180deg, var(--kb-mod-a), var(--kb-mod-b));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.18), inset 0 -3px 0 var(--kb-mod-side), 0 2px 0 rgba(0,0,0,.55), 0 4px 6px rgba(0,0,0,.45);
+}
+.kb .key.mod::before{ background:linear-gradient(180deg, rgba(0,0,0,.10), rgba(255,255,255,.10)); }
+.kb .key.acc{
+  color:var(--kb-acc-ink); font-size:9.5px;
+  background:linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0) 40%), linear-gradient(180deg, var(--kb-acc-a), var(--kb-acc-b));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.25), inset 0 -3px 0 var(--kb-acc-side), 0 2px 0 rgba(0,0,0,.55), 0 4px 6px rgba(0,0,0,.45);
+}
+.kb .key.acc::before{ background:linear-gradient(180deg, rgba(0,0,0,.08), rgba(255,255,255,.14)); }
+.kb .key > *, .kb .key{ text-shadow:0 1px 0 rgba(255,255,255,.25); }
+.kb .key.mod, .kb .key.acc{ text-shadow:0 1px 0 rgba(0,0,0,.3); }
+.kb .key.bump::after{            /* marca táctil en F y J */
+  content:""; position:absolute; left:50%; bottom:8px; width:10px; height:2px; margin-left:-5px;
+  border-radius:1px; background:rgba(0,0,0,.35);
+}
+.kb .key:hover{ transform:translateY(1.5px); box-shadow:inset 0 0 0 1px rgba(255,255,255,.3), inset 0 -1.5px 0 var(--kb-cap-side), 0 1px 0 rgba(0,0,0,.55), 0 2px 3px rgba(0,0,0,.4); }
+.kb .key.mod:hover{ box-shadow:inset 0 0 0 1px rgba(255,255,255,.15), inset 0 -1.5px 0 var(--kb-mod-side), 0 1px 0 rgba(0,0,0,.55), 0 2px 3px rgba(0,0,0,.4); }
+.kb .key.acc:hover{ box-shadow:inset 0 0 0 1px rgba(255,255,255,.2), inset 0 -1.5px 0 var(--kb-acc-side), 0 1px 0 rgba(0,0,0,.55), 0 2px 3px rgba(0,0,0,.4); }
+
+/* ---------- Cara inferior ---------- */
+.kb .kb-bottom{
+  transform:rotateY(180deg);
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0 2px, transparent 2px 5px),
+    linear-gradient(180deg, #1b1f25, #101317);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.07), inset 0 -4px 8px rgba(0,0,0,.5), 0 3px 0 #0a0c0f;
+}
+.kb .kb-foot{ position:absolute; width:62px; height:20px; border-radius:6px;
+  background:linear-gradient(180deg,#0a0b0d,#1f2329); box-shadow:inset 0 0 0 1px rgba(255,255,255,.05), 0 1px 0 rgba(255,255,255,.04); }
+.kb .kb-screw{ position:absolute; width:9px; height:9px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #aeb6bf, #5d656e 60%, #2a2f35);
+  box-shadow:0 0 0 2px rgba(0,0,0,.45); }
+.kb .kb-screw::after{ content:""; position:absolute; left:1.5px; right:1.5px; top:50%; height:1.5px; margin-top:-.75px; background:rgba(0,0,0,.55); transform:rotate(35deg); }
+.kb .kb-vent{ position:absolute; width:78px; height:34px; border-radius:6px;
+  background:repeating-linear-gradient(90deg,#07090b 0 3px,transparent 3px 8px); opacity:.9; }
+.kb .kb-label{
+  position:absolute; left:50%; top:78px; width:190px; height:56px; margin-left:-95px; border-radius:3px;
+  background:linear-gradient(180deg,#eef2ef,#d4dbd6); box-shadow:0 2px 4px rgba(0,0,0,.4), inset 0 0 0 1px #b4bcb6;
+}
+.kb .kb-label b{ position:absolute; top:8px; left:10px; right:10px; font-family:var(--kb-mono); font-size:9px; color:#1c2622; }
+.kb .kb-label span{ position:absolute; top:24px; left:10px; right:10px; font-family:var(--kb-mono); font-size:7.5px; color:#4a5a53; }
+.kb .kb-label .kb-bar{ top:auto; bottom:7px; left:10px; right:auto; width:120px; height:8px;
+  background:repeating-linear-gradient(90deg,#1c2622 0 1px,transparent 1px 2.2px,#1c2622 2.2px 3px,transparent 3px 3.6px); }
+.kb .kb-port{ position:absolute; left:50%; top:-1px; width:26px; height:8px; margin-left:-13px; border-radius:0 0 4px 4px;
+  background:linear-gradient(180deg,#05070a,#1a1e24); box-shadow:inset 0 -1px 0 rgba(255,255,255,.08); }

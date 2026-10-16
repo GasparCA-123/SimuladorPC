@@ -1,0 +1,130 @@
+:root{
+  --pcb-a:#0d4640;        /* color superior del PCB */
+  --pcb-b:#082f2b;        /* color inferior del PCB */
+  --gold:#d8b25c;         /* contactos dorados */
+  --gold-dark:#8a6a2c;
+  --mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+/* ---------- Contenedor con perspectiva (para poder girarlo) ---------- */
+.flip-viewport{
+  position:relative; width:560px; height:132px;
+  perspective:1400px;
+}
+.flip-inner{
+  position:relative; width:100%; height:100%;
+  transform-style:preserve-3d; cursor:grab;
+  transition:transform .6s cubic-bezier(.4,0,.2,1);
+  touch-action:pan-y;
+}
+.flip-inner.dragging{ transition:none; cursor:grabbing; }
+
+.ram-face{
+  position:absolute; inset:0;
+  backface-visibility:hidden; -webkit-backface-visibility:hidden;
+  border-radius:8px 8px 3px 3px;
+}
+.ram-back{ transform:rotateY(180deg); }
+
+/* ---------- PCB (placa del módulo) ---------- */
+.ram{
+  border-radius:8px 8px 3px 3px;
+  background:
+    radial-gradient(circle at 12% 10%, rgba(255,255,255,.08), transparent 30%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,.02) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(-45deg, rgba(0,0,0,.04) 0 1px, transparent 1px 3px),
+    linear-gradient(100deg, rgba(255,255,255,.05), transparent 22%),
+    linear-gradient(180deg, var(--pcb-a), var(--pcb-b) 85%);
+  box-shadow:
+    inset 0 0 0 1px rgba(120,225,215,.4),
+    inset 0 2px 0 rgba(255,255,255,.10),
+    inset 0 -3px 6px rgba(0,0,0,.4),
+    0 24px 40px rgba(0,0,0,.55);
+}
+
+/* ---------- Chips de memoria (DRAM) ---------- */
+.dram{
+  position:absolute; top:16px; width:44px; height:64px; border-radius:2px;
+  background:
+    radial-gradient(circle at 14% 12%, rgba(255,255,255,.14), transparent 32%),
+    linear-gradient(160deg, #20262c, #05070a 85%);
+  box-shadow:inset 0 0 0 1px #2c333a, 0 3px 6px rgba(0,0,0,.5);
+}
+.dram::before{                       /* línea marcada en el encapsulado */
+  content:""; position:absolute; top:10px; left:6px; right:6px; height:1.4px;
+  background:rgba(150,170,178,.35);
+}
+.dram::after{                        /* texto impreso: data-txt="D9WCW&#10;4G16" */
+  content:attr(data-txt); position:absolute; top:16px; left:0; right:0; text-align:center;
+  font-family:var(--mono); font-size:5.2px; letter-spacing:.03em; color:#546067;
+  line-height:1.5; white-space:pre;
+}
+
+/* ---------- Chip SPD (8 patitas) ---------- */
+.spd{
+  position:absolute; width:26px; height:15px; border-radius:1.5px;
+  background:linear-gradient(160deg, #22262c, #05070a 85%);
+  box-shadow:inset 0 0 0 1px #2c333a, 0 2px 4px rgba(0,0,0,.45);
+}
+.spd::after{
+  content:"SPD"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:5.5px; letter-spacing:.02em; color:#5c6a73;
+}
+.spd .leg{ position:absolute; top:2px; bottom:2px; width:1.4px; background:#3a4249; }
+
+/* ---------- Etiqueta de especificaciones ---------- */
+.label-sticker{
+  position:absolute; width:96px; height:30px; border-radius:2px;
+  background:linear-gradient(180deg,#eef2ef,#d7dfda);
+  box-shadow:0 2px 4px rgba(0,0,0,.35), inset 0 0 0 1px #b9c2bb;
+}
+.label-sticker .l1{
+  position:absolute; top:5px; left:6px; right:6px;
+  font-family:var(--mono); font-size:8px; font-weight:700; color:#1c2622;
+}
+.label-sticker .l2{
+  position:absolute; top:16px; left:6px; right:6px;
+  font-family:var(--mono); font-size:6px; color:#4a5a53; letter-spacing:.02em;
+}
+.label-sticker .barcode{
+  position:absolute; bottom:4px; left:6px; width:60px; height:6px;
+  background:repeating-linear-gradient(90deg, #1c2622 0 1px, transparent 1px 2.2px, #1c2622 2.2px 3px, transparent 3px 3.6px);
+}
+
+/* ---------- Contactos dorados + muesca DDR1 (46.5%–49.5%, casi al centro) ---------- */
+.fingers-strip{
+  position:absolute; left:14px; right:14px; bottom:0; height:26px; border-radius:0 0 2px 2px;
+  background-color:var(--pcb-b);
+  background-image:
+    linear-gradient(90deg, transparent 0 46.5%, var(--pcb-b) 46.5% 49.5%, transparent 49.5%),
+    repeating-linear-gradient(90deg, var(--gold) 0 1.6px, var(--gold-dark) 1.6px 3.1px);
+  box-shadow:inset 0 2px 3px rgba(0,0,0,.35);
+}
+.fingers-strip::after{               /* brillo en el borde superior */
+  content:""; position:absolute; left:0; right:0; top:0; height:2px;
+  background:linear-gradient(180deg, rgba(255,255,255,.25), transparent);
+}
+
+/* ---------- Cara trasera: PCB desnudo, pistas, vías y serigrafía ---------- */
+.ram-trace{ position:absolute; height:1.4px; background:rgba(120,225,215,.18); }
+.ram-trace.v{ width:1.4px; height:auto; }
+.ram-via{
+  position:absolute; width:5px; height:5px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #cfead2, #6fae8f 55%, #234438 100%);
+  box-shadow:0 0 0 1.3px rgba(0,0,0,.35);
+}
+.ram-print{
+  position:absolute; font-family:var(--mono); font-size:7px; letter-spacing:.04em;
+  color:rgba(210,235,225,.4);
+}
+
+/* ---- Vista en tarjeta de la Biblioteca (antes estaba en style.css) ---- */
+.biblioteca-card-model:has(.flip-viewport.biblioteca-componente){
+  position:relative; overflow:hidden;
+}
+.biblioteca-card .flip-viewport.biblioteca-componente{
+  width:560px; height:132px; margin:0;
+  position:absolute; left:50%; top:50%;
+  transform:translate(-50%,-50%) scale(0.45);
+  transform-origin:center center;
+}
