@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>PC Builder Academy</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<header id="bar" class="bar" hidden></header>
+<main id="app"></main>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="modalRoot"></div>
+
+<!-- Datos: primero los de tu proyecto original, luego los del juego -->
+<script src="datos-repo.js"></script>
+<script src="datos-juego.js"></script>
+<!-- Lógica, en orden -->
+<script src="js/00a-arte-base.js"></script>
+<script src="js/00b-arte-piezas.js"></script>
+<script src="js/01-nucleo.js"></script>
+<script src="js/02-compat.js"></script>
+<script src="js/03-taller.js"></script>
+<script src="js/04-tienda.js"></script>
+<script src="js/05-armado.js"></script>
+<script src="js/06-post.js"></script>
+<script src="js/07-resultado.js"></script>
+<script src="js/08-biblioteca.js"></script>
+<script>Arte.montar(); go("menu");</script>
+</body>
+</html>
